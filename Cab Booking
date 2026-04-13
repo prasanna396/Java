@@ -1,0 +1,72 @@
+import java.util.*;
+class CabBooking{
+   int cabNumber;
+   long driverNumber;
+   String dateOfBooking,cabName;
+   int inTime;
+   int outTime;
+   double billAmt;
+   CabBooking(){
+      cabNumber=2006;
+      cabName="Globe Travels";
+      driverNumber=894327812;
+      dateOfBooking="04-08-2025";
+      inTime=4;
+      outTime=5;
+   }
+
+   CabBooking(int c_No,long d_No,String d_Book,String c_Name,int iT,int oT){
+      this.cabNumber=c_No;
+      this.cabName=c_Name;
+      this.driverNumber=d_No;
+      this.dateOfBooking=d_Book;
+      this.inTime=iT;
+      this.outTime=oT;
+   }
+   public double computeBillAmt(){
+      billAmt=(outTime-inTime)*200;
+      return billAmt;
+   }
+
+   public void display(){
+      System.out.println("Cab Number:"+cabNumber);
+      System.out.println("Cab Name:"+cabName);
+      System.out.println("Driver Number:"+driverNumber);
+      System.out.println("Date Of Booking:"+dateOfBooking);
+      System.out.println("In Time:"+inTime);
+      System.out.println("Out Time:"+outTime);
+      System.out.println("Bill Amount:$"+computeBillAmt());
+   }
+}
+
+public class CabBookingPgm{
+   public static void main(String[] args){
+      Scanner in=new Scanner(System.in);
+      String d_Book,c_Name;
+      int i,c_No,iT,oT,n;
+      long d_No;    
+      CabBooking[] Cab=new CabBooking[10];
+      System.out.print("Enter No Of Bookings:");
+      n=in.nextInt();
+      for(i=0;i<n;i++){
+	 System.out.print("Enter Cab Name:");
+	 c_Name=in.next();
+	 System.out.print("Enter Cab No:");
+	 c_No=in.nextInt();
+	 System.out.print("Enter Driver No;");
+	 d_No=in.nextLong();
+	 System.out.print("Enter Date Of Booking:");
+	 d_Book=in.next();
+	 System.out.print("Enter In Time:");
+	 iT=in.nextInt();
+	 System.out.print("Enter out Time:");
+	 oT=in.nextInt();
+	 Cab[i]=new CabBooking(c_No,d_No,d_Book,c_Name,iT,oT);
+	 Cab[i].computeBillAmt();
+	 Cab[i].display();
+     
+      }
+   }
+}
+
+
