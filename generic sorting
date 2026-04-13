@@ -1,0 +1,43 @@
+public class GenericSort {
+
+    public static <T extends Comparable<T>> void sortArray(T[] array) {
+        int n = array.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (array[i].compareTo(array[j]) > 0) {
+                    T temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+        }
+    }
+
+    public static <T> void displayArray(T[] array) {
+        for (T element : array) {
+            System.out.print(element + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Integer[] intArray = {40, 10, 50, 30, 20};
+        System.out.println("Original Integer Array:");
+        displayArray(intArray);
+
+        sortArray(intArray);
+        System.out.println("Sorted Integer Array:");
+        displayArray(intArray);
+
+        System.out.println("----------------------------------");
+
+        String[] strArray = {"banana", "apple", "mango", "cherry"};
+        System.out.println("Original String Array:");
+        displayArray(strArray);
+
+        sortArray(strArray);
+        System.out.println("Sorted String Array:");
+        displayArray(strArray);
+    }
+}
