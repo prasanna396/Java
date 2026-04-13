@@ -1,0 +1,22 @@
+#include <jni.h>
+#include <stdio.h>
+#include "HelloWorld.h"
+JNIEXPORT void JNICALL
+Java_HelloWorld_print(JNIEnv *env, jobject obj)
+{
+printf("Hello World!\n");
+return;
+}
+[24bcs055@mepcolinux JNI]$cat HelloWorld.java
+public class HelloWorld
+{
+        private native void print();
+        public static void main(String[] args)
+        {
+                new HelloWorld().print();
+        }
+        static
+        {
+                System.loadLibrary("helloworld");
+        }
+}
