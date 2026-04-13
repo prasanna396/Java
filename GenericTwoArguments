@@ -1,0 +1,15 @@
+public class GenericTwoArguments {
+
+    public static <A, B> void printTwoValues(A first, B second) {
+        System.out.println("First argument: " + first);
+        System.out.println("Second argument: " + second);
+        System.out.println("----------------------------");
+    }
+
+    public static void main(String[] args) {
+        printTwoValues(100, "Hello World");
+        printTwoValues("Java", 33.754);
+        printTwoValues(true, 99);
+        printTwoValues("welcome", "java");
+    }
+}
