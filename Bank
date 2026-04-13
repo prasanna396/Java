@@ -1,0 +1,75 @@
+import java.util.*;
+
+ class Bank {
+        String accode;
+        String acname;
+        long acnum;
+        double bal;
+        static String bank="Bank";
+        double with;
+        double dep;
+
+        Bank(String accode,String acname,long acnum,double bal) {
+         this.accode=accode;
+         this.acname=acname;
+         this.acnum=acnum;
+         this.bal=bal;
+        }
+        void display() {
+                System.out.print("\nBank name: " +bank);
+                System.out.print("\nAccount IFSC CODE: " +accode);
+                System.out.print("\nAccount Name: " +acname);
+                System.out.print("\nAccount Number: " +acnum);
+                System.out.print("\nAccount balence: " +bal);
+                System.out.print("\nAccount After withdraw amount: " +with);
+                System.out.println("\nAccount After Deposite amount: " +dep);
+        }
+        void withDraw()
+        {
+                Scanner in = new Scanner(System.in);
+                System.out.print("Enter amount to withdraw:");
+                double amt =in.nextDouble();
+                if(bal<amt)
+                {
+                        System.out.print("Insufficient balance:");
+                }
+                else
+                {
+                   with=bal-amt;
+                   System.out.println("\nAccount After withdraw amount: " +with);
+
+                }
+        }
+        void deposite(){
+           System.out.print("Enter amount to deposite:");
+           Scanner in = new Scanner(System.in);
+           double amt =in.nextDouble();
+           dep=with+amt;
+           System.out.println("\nAccount After Deposite amount: " +dep);
+        }
+ }
+public class bank {
+   public static void main(String[] args) {
+       String accode,acname;
+       long acnum;
+       double bal;
+       Scanner in = new Scanner(System.in);
+       System.out.print("Enter no of person:");
+       int n=in.nextInt();
+       Bank[] b =new Bank[n];
+       for (int i=0;i<n;i++) {
+           System.out.print("Enter account code:");
+           accode =in.next();
+           System.out.print("Enter account name:");
+           acname =in.next();
+           System.out.print("Enter account number:");
+           acnum =in.nextLong();
+           System.out.print("Enter balance:");
+           bal =in.nextDouble();
+           b[i] =new Bank(accode,acname,acnum,bal);
+           b[i].withDraw();
+           b[i].deposite();
+           b[i].display();
+       }
+   }
+}
