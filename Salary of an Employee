@@ -1,0 +1,75 @@
+import java.util.*;
+
+class Employee{
+   static String indusname="Vk";
+   String empname;
+   String empid;
+   String empaddress;
+   String empmailid;
+   long empmobileno;
+   short empage;
+   double empbp,da,hra,pf,sc,gs,ns;
+   public void readEmployee(){
+      Scanner in=new Scanner(System.in);
+      System.out.print("Enter a Name:");
+      empname=in.next();
+      
+      System.out.print("Enter a ID:");
+      empid=in.next();
+      
+      System.out.print("Enter a Address:");
+      empaddress=in.next();
+      
+      System.out.print("Enter a Mail Id:");
+      empmailid=in.next();
+      
+      System.out.print("Enter a Mobile Number:");
+      empmobileno=in.nextLong();
+      
+      System.out.print("Enter a Age:");
+      empage=in.nextShort();
+      
+      System.out.println("Enter a Basic Pay:");
+      empbp=in.nextDouble();
+      }
+   public void computeSalary(){
+      da=empbp*(0.97);
+      hra=empbp*(0.1);
+      pf=empbp*(0.12);
+      sc=empbp*(0.01);
+      gs=empbp+da+hra;
+      ns=gs-(pf+sc);
+      }
+   static void indChange(){
+      indusname="PRK";
+      }
+   public void display(){
+      System.out.println("Industry Name:"+indusname);
+   }
+   public void displayEmployee(){
+      System.out.println("Industry Name:"+indusname);
+      System.out.println("Employee Name:" +empname);
+      System.out.println("Employee ID:" +empid); 
+      System.out.println("Employee Address:" +empaddress);
+      System.out.println("Employee Mail ID:" +empmailid);
+      System.out.println("Employee Mobile Number:" +empmobileno);
+      System.out.println("Employee AGE:" +empage);
+      System.out.println("Employee Salary:" +empbp);
+      System.out.println("Employee GrossSalary:" +gs);
+      System.out.println("Employee NetSalary:" +ns);
+      }   
+   } 
+public class SEmployee{
+   static{
+      System.out.println("Industry");
+   }
+   public static void main(String [] args){
+      Employee e=new Employee();
+      e.display();
+      e.readEmployee();
+      e.computeSalary();
+      Employee.indChange();
+      e.displayEmployee();
+      
+   }
+}
