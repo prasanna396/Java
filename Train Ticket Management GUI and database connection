@@ -1,0 +1,212 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+
+public class TrainTicketManagement extends JFrame implements ActionListener {
+
+    JTextField custNameField, mobileField, emailField;
+
+    JTextField trainNoField, sourceField, destField,
+               ticketsField, amountPerPersonField, dateField;
+
+    JButton submitBtn, resetBtn;
+
+    Connection con;
+    PreparedStatement pst;
+
+    TrainTicketManagement() {
+        setTitle("Train Ticket Management System (Oracle DB)");
+        setSize(500, 550);
+        setLayout(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel title = new JLabel("Ticket Booking Form");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+        title.setBounds(120, 20, 300, 30);
+        add(title);
+
+        JLabel custNameLbl = new JLabel("Customer Name:");
+        custNameLbl.setBounds(50, 80, 150, 25);
+        add(custNameLbl);
+        custNameField = new JTextField();
+        custNameField.setBounds(220, 80, 200, 25);
+        add(custNameField);
+
+        JLabel mobileLbl = new JLabel("Mobile Number:");
+        mobileLbl.setBounds(50, 120, 150, 25);
+        add(mobileLbl);
+        mobileField = new JTextField();
+        mobileField.setBounds(220, 120, 200, 25);
+        add(mobileField);
+
+        JLabel emailLbl = new JLabel("Email:");
+        emailLbl.setBounds(50, 160, 150, 25);
+        add(emailLbl);
+        emailField = new JTextField();
+        emailField.setBounds(220, 160, 200, 25);
+        add(emailField);
+
+        JLabel trainNoLbl = new JLabel("Train No:");
+        trainNoLbl.setBounds(50, 200, 150, 25);
+        add(trainNoLbl);
+        trainNoField = new JTextField();
+        trainNoField.setBounds(220, 200, 200, 25);
+        add(trainNoField);
+
+        JLabel sourceLbl = new JLabel("Source:");
+        sourceLbl.setBounds(50, 240, 150, 25);
+        add(sourceLbl);
+        sourceField = new JTextField();
+        sourceField.setBounds(220, 240, 200, 25);
+        add(sourceField);
+
+        JLabel destLbl = new JLabel("Destination:");
+        destLbl.setBounds(50, 280, 150, 25);
+        add(destLbl);
+        destField = new JTextField();
+        destField.setBounds(220, 280, 200, 25);
+        add(destField);
+
+        JLabel dateLbl = new JLabel("Date (DD/MM/YYYY):");
+        dateLbl.setBounds(50, 320, 150, 25);
+        add(dateLbl);
+        dateField = new JTextField();
+        dateField.setBounds(220, 320, 200, 25);
+        add(dateField);
+
+        JLabel ticketsLbl = new JLabel("No. of Tickets:");
+        ticketsLbl.setBounds(50, 360, 150, 25);
+        add(ticketsLbl);
+        ticketsField = new JTextField();
+        ticketsField.setBounds(220, 360, 200, 25);
+        add(ticketsField);
+
+        JLabel amountLbl = new JLabel("Amount per Person (₹):");
+        amountLbl.setBounds(50, 400, 150, 25);
+        add(amountLbl);
+        amountPerPersonField = new JTextField();
+        amountPerPersonField.setBounds(220, 400, 200, 25);
+        add(amountPerPersonField);
+
+        submitBtn = new JButton("Submit");
+        submitBtn.setBounds(120, 450, 100, 30);
+        add(submitBtn);
+
+        resetBtn = new JButton("Reset");
+        resetBtn.setBounds(270, 450, 100, 30);
+        add(resetBtn);
+
+        submitBtn.addActionListener(this);
+        resetBtn.addActionListener(this);
+
+        connectToOracle();
+
+        setVisible(true);
+    }
+
+    void connectToOracle() {
+        try {
+
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        String url = "jdbc:oracle:thin:@172.16.16.50:1521:ORACLE21C";
+        String username = "C##24BCS055";
+        String pwd = "C##24BCS055";
+        con = DriverManager.getConnection(url, username, pwd);
+             System.out.println("Connected to Oracle Database successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Database Connection Failed: " + e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitBtn) {
+
+            String custName = custNameField.getText();
+            String mobile = mobileField.getText();
+            String email = emailField.getText();
+            String trainNo = trainNoField.getText();
+            String source = sourceField.getText();
+            String destination = destField.getText();
+            String date = dateField.getText();
+
+            int noOfTickets = 0;
+            double amountPerPerson = 0.0;
+            double billAmount = 0.0;
+
+            try {
+                noOfTickets = Integer.parseInt(ticketsField.getText());
+                amountPerPerson = Double.parseDouble(amountPerPersonField.getText());
+
+                billAmount = noOfTickets * amountPerPerson;
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Please enter valid numeric values for 'No. of Tickets' and 'Amount per Person'.",
+                    "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+             }
+
+            try {
+
+                String sql = "INSERT INTO TRAINS ("
+                        + "CUST_NAME,CUST_NUM,CUST_EMAIL,TRAIN_NUM,SOURCE,DESTINATION,NO_OF_TICK,AMT_PER_PER,T_DATE,BILL) "
+                        + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                pst = con.prepareStatement(sql);
+
+                pst.setString(1, custName);
+                pst.setString(2, mobile);
+                pst.setString(3, email);
+                pst.setString(4, trainNo);
+                pst.setString(5, source);
+                pst.setString(6, destination);
+                pst.setInt(7, noOfTickets);
+                pst.setDouble(8, amountPerPerson);
+                pst.setString(9, date);
+                pst.setDouble(10, billAmount);
+
+                pst.executeUpdate();
+
+                String billMessage = String.format(
+                    "--- BOOKING SUCCESSFUL ---\n\n" +
+                    "Customer: %s\n" +
+                    "Mobile: %s\n" +
+                    "Train No: %s (%s to %s)\n" +
+                    "Date of Journey: %s\n\n" +
+                    "Tickets Booked: %d\n" +
+                    "Cost per Ticket: ₹ %.2f\n\n" +
+                    "TOTAL BILL AMOUNT: ₹ %.2f",
+                    custName, mobile, trainNo, source, destination, date,
+                    noOfTickets, amountPerPerson, billAmount
+                );
+
+                JOptionPane.showMessageDialog(this, billMessage, "Ticket Confirmation & Bill", JOptionPane.INFORMATION_MESSAGE);
+
+                resetFields();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Database Error: " + ex.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (e.getSource() == resetBtn) {
+            resetFields();
+        }
+    }
+
+    private void resetFields() {
+        custNameField.setText("");
+        mobileField.setText("");
+        emailField.setText("");
+        trainNoField.setText("");
+        sourceField.setText("");
+        destField.setText("");
+        ticketsField.setText("");
+        amountPerPersonField.setText("");
+        dateField.setText("");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new TrainTicketManagement();
+        });
+}
+}
