@@ -1,0 +1,30 @@
+public class GenericSearch {
+
+    public static <T> boolean searchElement(T[] array, T key) {
+        for (T element : array) {
+            if (element.equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+        Integer[] numbers = {10, 20, 30, 40, 50};
+        Integer intKey = 30;
+
+        if (searchElement(numbers, intKey))
+            System.out.println(intKey + " is found in the integer array.");
+        else
+            System.out.println(intKey + " is NOT found in the integer array.");
+
+        String[] fruits = {"apple", "banana", "cherry", "mango", "orange"};
+        String strKey = "mango";
+
+        if (searchElement(fruits, strKey))
+            System.out.println("\"" + strKey + "\" is found in the string array.");
+        else
+            System.out.println("\"" + strKey + "\" is NOT found in the string array.");
+    }
+}
