@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Patient {
+   String pid,wno;
+   static String hosname = "Anu";
+   short page;
+   long pmobno;
+  
+
+   Patient(String pid,String wno,short page ,long pmobno) {
+      this.pid=pid;
+      this.page=page;
+      this.pmobno=pmobno;
+      this.wno=wno;
+   }
+   void display() {
+      System.out.println("Hospital Name :" +hosname);
+      System.out.println("Patient id:" +pid);
+      System.out.println("Patient age :" +page);
+      System.out.println("Patient Mobile no:" +pmobno);
+      System.out.println("Ward Number:"+wno);
+   }
+}
+public class patient {
+   public static void main(String[] args) {
+      String pid,hosname,wno;
+      short page;
+      long pmobno;
+      Scanner in =new Scanner(System.in);
+      System.out.print("Enter Number of patient:");
+      int n =in.nextInt();
+      Patient[] p =new Patient[n];
+      for (int i=0;i<n;i++){
+         System.out.print("Enter patient id:");
+         pid=in.next();
+         System.out.print("Enter patient age:");
+         page=in.nextShort();
+         System.out.print("Enter patient Mobile number:");
+         pmobno=in.nextLong();
+	 System.out.println("Enter Ward No:");
+	 wno=in.next();
+         p[i]=new Patient(pid,wno,page,pmobno);
+         p[i].display();
+      }
+   }
+}
+
