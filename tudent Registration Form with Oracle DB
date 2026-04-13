@@ -1,0 +1,124 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+
+public class StudentRegistrationOracle extends JFrame implements ActionListener {
+
+    JTextField nameField, fatherField, mobileField;
+    JTextArea addressArea;
+    JButton submitBtn, clearBtn;
+
+    Connection con;
+    PreparedStatement pst;
+
+    StudentRegistrationOracle() {
+        setTitle("Student Registration Form (Oracle DB)");
+        setSize(450, 400);
+        setLayout(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel title = new JLabel("Student Registration Form");
+        title.setFont(new Font("Arial", Font.BOLD, 18));
+        title.setBounds(90, 20, 300, 30);
+        add(title);
+
+        JLabel nameLbl = new JLabel("Name:");
+        nameLbl.setBounds(50, 80, 120, 25);
+        add(nameLbl);
+        nameField = new JTextField();
+        nameField.setBounds(180, 80, 180, 25);
+        add(nameField);
+
+        JLabel fatherLbl = new JLabel("Father's Name:");
+        fatherLbl.setBounds(50, 120, 120, 25);
+        add(fatherLbl);
+        fatherField = new JTextField();
+        fatherField.setBounds(180, 120, 180, 25);
+        add(fatherField);
+
+        JLabel mobileLbl = new JLabel("Mobile Number:");
+        mobileLbl.setBounds(50, 160, 120, 25);
+        add(mobileLbl);
+        mobileField = new JTextField();
+        mobileField.setBounds(180, 160, 180, 25);
+        add(mobileField);
+
+        JLabel addressLbl = new JLabel("Address:");
+        addressLbl.setBounds(50, 200, 120, 25);
+        add(addressLbl);
+        addressArea = new JTextArea();
+        addressArea.setBounds(180, 200, 180, 60);
+        add(addressArea);
+
+        submitBtn = new JButton("Submit");
+        submitBtn.setBounds(90, 290, 100, 30);
+        add(submitBtn);
+
+        clearBtn = new JButton("Clear");
+        clearBtn.setBounds(220, 290, 100, 30);
+        add(clearBtn);
+
+        submitBtn.addActionListener(this);
+        clearBtn.addActionListener(this);
+
+        connectToOracle();
+
+        setVisible(true);
+    }
+
+    // Establish Oracle Database Connection
+    void connectToOracle() {
+        try {
+            // Load Oracle JDBC driver
+             Class.forName("oracle.jdbc.driver.OracleDriver");
+        String url = "jdbc:oracle:thin:@172.16.16.50:1521:ORACLE21C";
+        // Database credentials
+        String username = "C##24BCS055";
+        String pwd = "C##24BCS055";
+        con = DriverManager.getConnection(url, username, pwd);
+             System.out.println("Connected to Oracle Database successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Database Connection Failed: " + e.getMessage());
+        }
+    }
+
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitBtn) {
+            String name = nameField.getText();
+            String father = fatherField.getText();
+            String moblie = mobileField.getText();
+            String address = addressArea.getText();
+
+            try {
+                pst = con.prepareStatement("INSERT INTO STUDENTS(NAME, FATHER_NAME, MOBLIE, ADDRESS) VALUES(?, ?, ?, ?)");
+                pst.setString(1, name);
+                pst.setString(2, father);
+                pst.setString(3, moblie);
+                pst.setString(4, address);
+                pst.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Record Added Successfully!");
+                nameField.setText("");
+                fatherField.setText("");
+                mobileField.setText("");
+                addressArea.setText("");
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
+        } else if (e.getSource() == clearBtn) {
+            nameField.setText("");
+            fatherField.setText("");
+            mobileField.setText("");
+            addressArea.setText("");
+        }
+    }
+
+    public static void main(String[] args) {
+        new StudentRegistrationOracle();
+    }
+}
+
+
